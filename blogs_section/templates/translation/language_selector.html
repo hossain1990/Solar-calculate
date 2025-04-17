@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}اختيار اللغة - حاسبة الطاقة الشمسية{% endblock %}
+
+{% block styles %}
+<style>
+  .language-selector {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: white;
+  }
+  
+  .language-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .language-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border-color: #4CAF50;
+  }
+  
+  .language-card.active {
+    border-color: #4CAF50;
+    background-color: #f1f8e9;
+  }
+  
+  .language-flag {
+    width: 40px;
+    height: 40px;
+    margin-left: 1rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .auto-detect {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="language-selector">
+    <h2 class="text-center mb-4">اختر لغة العرض</h2>
+    
+    <div class="auto-detect mb-4">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="autoDetectLanguage" checked>
+        <label class="form-check-label" for="autoDetectLanguage">
+          اكتشاف لغة المتصفح تلقائياً
+        </label>
+      </div>
+      <small class="text-muted">اللغة المكتشفة: <span id="detectedLanguage">{{ current_language }}</span></small>
+    </div>
+    
+    <div id="languageOptions">
+      <div class="language-card {% if current_language == 'ar' %}active{% endif %}" data-language="ar">
+        <img src="/static/images/flags/ar.png" alt="العربية" class="language-flag">
+        <div>
+          <h5 class="mb-1">العربية</h5>
+          <small class="text-muted">اللغة الافتراضية</small>
+        </div>
+      </div>
+      
+      <div class="language-card {% if current_language == 'en' %}active{% endif %}" data-language="en">
+        <img src="/static/images/flags/en.png" alt="English" class="language-flag">
+        <div>
+          <h5 class="mb-1">English</h5>
+          <small class="text-muted">English language</small>
+        </div>
+      </div>
+      
+      <div class="language-card {% if current_language == 'fr' %}active{% endif %}" data-language="fr">
+        <img src="/static/images/flags/fr.png" alt="Français" class="language-flag">
+        <div>
+          <h5 class="mb-1">Français</h5>
+          <small class="text-muted">Langue française</small>
+        </div>
+      </div>
+      
+      <div class="language-card {% if current_language == 'es' %}active{% endif %}" data-language="es">
+        <img src="/static/images/flags/es.png" alt="Español" class="language-flag">
+        <div>
+          <h5 class="mb-1">Español</h5>
+          <small class="text-muted">Idioma español</small>
+        </div>
+      </div>
+      
+      <div class="language-card {% if current_language == 'de' %}active{% endif %}" data-language="de">
+        <img src="/static/images/flags/de.png" alt="Deutsch" class="language-flag">
+        <div>
+          <h5 class="mb-1">Deutsch</h5>
+          <small class="text-muted">Deutsche Sprache</small>
+        </div>
+      </div>
+    </div>
+    
+    <div class="d-flex justify-content-between mt-4">
+      <button id="cancelButton" class="btn btn-outline-secondary">إلغاء</button>
+      <button id="saveLanguageButton" class="btn btn-success">حفظ التفضيلات</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const languageCards = document.querySelectorAll('.language-card');
+    const autoDetectCheckbox = document.getElementById('autoDetectLanguage');
+    const saveButton = document.getElementById('saveLanguageButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const languageOptions = document.getElementById('languageOptions');
+    
+    // تحديد اللغة المحددة
+    let selectedLanguage = '{{ current_language }}';
+    
+    // تعطيل/تفعيل خيارات اللغة بناءً على حالة الاكتشاف التلقائي
+    function toggleLanguageOptions() {
+      languageOptions.style.opacity = autoDetectCheckbox.checked ? '0.5' : '1';
+      languageOptions.style.pointerEvents = autoDetectCheckbox.checked ? 'none' : 'auto';
+    }
+    
+    // تحديث حالة الاكتشاف التلقائي عند التحميل
+    toggleLanguageOptions();
+    
+    // تحديث حالة الاكتشاف التلقائي عند تغيير الخيار
+    autoDetectCheckbox.addEventListener('change', toggleLanguageOptions);
+    
+    // تحديد اللغة عند النقر على بطاقة اللغة
+    languageCards.forEach(card => {
+      card.addEventListener('click', function() {
+        // إزالة الفئة النشطة من جميع البطاقات
+        languageCards.forEach(c => c.classList.remove('active'));
+        
+        // إضافة الفئة النشطة إلى البطاقة المحددة
+        this.classList.add('active');
+        
+        // تحديث اللغة المحددة
+        selectedLanguage = this.dataset.language;
+        
+        // تعطيل الاكتشاف التلقائي
+        autoDetectCheckbox.checked = false;
+        toggleLanguageOptions();
+      });
+    });
+    
+    // حفظ تفضيلات اللغة
+    saveButton.addEventListener('click', function() {
+      // إذا كان الاكتشاف التلقائي مفعلاً، استخدم لغة المتصفح
+      const useAutoDetect = autoDetectCheckbox.checked;
+      
+      // إرسال طلب لتعيين اللغة
+      fetch('/api/set_language', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          language: useAutoDetect ? null : selectedLanguage,
+          auto_detect: useAutoDetect
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // إعادة تحميل الصفحة لتطبيق اللغة الجديدة
+          window.location.href = document.referrer || '/';
+        } else {
+          alert('حدث خطأ أثناء حفظ تفضيلات اللغة');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('حدث خطأ أثناء حفظ تفضيلات اللغة');
+      });
+    });
+    
+    // إلغاء والعودة إلى الصفحة السابقة
+    cancelButton.addEventListener('click', function() {
+      window.location.href = document.referrer || '/';
+    });
+  });
+</script>
+{% endblock %}

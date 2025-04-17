@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}تقارير الأرباح - حاسبة الطاقة الشمسية{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">تقارير الأرباح</h1>
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="admin-sidebar mb-4">
+                <h5>لوحة التحكم</h5>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('admin_index') }}">الرئيسية</a>
+                    <a class="nav-link" href="{{ url_for('admin_posts') }}">المنشورات</a>
+                    <a class="nav-link" href="{{ url_for('admin_comments') }}">التعليقات</a>
+                    <a class="nav-link" href="{{ url_for('adsense.admin_adsense') }}">AdSense</a>
+                    <a class="nav-link active" href="{{ url_for('adsense.admin_earnings') }}">تقارير الأرباح</a>
+                    <a class="nav-link" href="#">Analytics</a>
+                    <a class="nav-link" href="#">Search Console</a>
+                </nav>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>تصفية التقرير</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{{ url_for('adsense.admin_earnings') }}">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">تاريخ البداية</label>
+                                    <input type="date" class="form-control" id="startDate" name="start_date" value="{{ start_date }}">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">تاريخ النهاية</label>
+                                    <input type="date" class="form-control" id="endDate" name="end_date" value="{{ end_date }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary mb-3">تطبيق</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>ملخص الأرباح</h5>
+                </div>
+                <div class="card-body">
+                    {% if earnings and earnings.rows %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">الأرباح المقدرة</h5>
+                                        <p class="card-text display-6">{{ earnings.rows[0].cells[0].value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">المشاهدات</h5>
+                                        <p class="card-text display-6">{{ earnings.rows[0].cells[1].value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">النقرات</h5>
+                                        <p class="card-text display-6">{{ earnings.rows[0].cells[3].value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            لا توجد بيانات أرباح متاحة للفترة المحددة.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>تفاصيل التقرير</h5>
+                </div>
+                <div class="card-body">
+                    {% if earnings and earnings.rows %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>التاريخ</th>
+                                        <th>الأرباح المقدرة</th>
+                                        <th>المشاهدات</th>
+                                        <th>الظهور</th>
+                                        <th>النقرات</th>
+                                        <th>RPM</th>
+                                        <th>CTR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in earnings.rows %}
+                                        <tr>
+                                            <td>{{ row.dimensionValues[0].value }}</td>
+                                            <td>{{ row.cells[0].value }}</td>
+                                            <td>{{ row.cells[1].value }}</td>
+                                            <td>{{ row.cells[2].value }}</td>
+                                            <td>{{ row.cells[3].value }}</td>
+                                            <td>{{ row.cells[4].value }}</td>
+                                            <td>{{ row.cells[5].value }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            لا توجد بيانات تفصيلية متاحة للفترة المحددة.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>الرسم البياني</h5>
+                </div>
+                <div class="card-body">
+                    {% if earnings and earnings.rows %}
+                        <canvas id="earningsChart" width="400" height="200"></canvas>
+                    {% else %}
+                        <div class="alert alert-info">
+                            لا توجد بيانات للرسم البياني للفترة المحددة.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if earnings and earnings.rows %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('earningsChart').getContext('2d');
+        
+        // استخراج البيانات من التقرير
+        const dates = [];
+        const earnings = [];
+        const pageViews = [];
+        
+        {% for row in earnings.rows %}
+            dates.push('{{ row.dimensionValues[0].value }}');
+            earnings.push({{ row.cells[0].value }});
+            pageViews.push({{ row.cells[1].value }});
+        {% endfor %}
+        
+        const earningsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'الأرباح المقدرة',
+                        data: earnings,
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        yAxisID: 'y',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'المشاهدات',
+                        data: pageViews,
+                        borderColor: 'rgba(33, 150, 243, 1)',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'الأرباح المقدرة'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        title: {
+                            display: true,
+                            text: 'المشاهدات'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

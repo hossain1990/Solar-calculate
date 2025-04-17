@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم المدونة - حاسبة الطاقة الشمسية</title>
+  <style>
+    .admin-sidebar {
+      background-color: #f8f9fa;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+    .admin-sidebar .nav-link {
+      color: #333;
+      padding: 0.5rem 0;
+      border-radius: 0.25rem;
+      transition: all 0.3s ease;
+    }
+    .admin-sidebar .nav-link:hover {
+      background-color: #e9ecef;
+      padding-right: 0.5rem;
+    }
+    .admin-sidebar .nav-link.active {
+      color: #fff;
+      background-color: #4CAF50;
+      padding-right: 0.5rem;
+    }
+    .stats-card {
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+    .post-list-item {
+      transition: background-color 0.3s ease;
+    }
+    .post-list-item:hover {
+      background-color: #f8f9fa;
+    }
+    .content-editor {
+      min-height: 300px;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      padding: 1rem;
+    }
+    .tag-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      background-color: #e9ecef;
+      padding: 0.25rem 0.5rem;
+      border-radius: 1rem;
+    }
+    .tag .close {
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+    .tag-input input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1 class="mb-4">لوحة تحكم المدونة</h1>
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="admin-sidebar mb-4">
+          <h5>لوحة التحكم</h5>
+          <nav class="nav flex-column mt-3">
+            <a class="nav-link active" href="#dashboard">الرئيسية</a>
+            <a class="nav-link" href="#posts">المنشورات</a>
+            <a class="nav-link" href="#comments">التعليقات</a>
+            <a class="nav-link" href="#categories">التصنيفات</a>
+            <a class="nav-link" href="#media">الوسائط</a>
+            <a class="nav-link" href="#adsense">AdSense</a>
+            <a class="nav-link" href="#analytics">Analytics</a>
+            <a class="nav-link" href="#search-console">Search Console</a>
+            <a class="nav-link" href="#settings">الإعدادات</a>
+          </nav>
+        </div>
+      </div>
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <!-- Quick Stats -->
+        <div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+          <div class="col">
+            <div class="card stats-card h-100 border-0">
+              <div class="card-body text-center">
+                <h6 class="card-title text-muted">المنشورات</h6>
+                <h2 class="card-text text-success">24</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card stats-card h-100 border-0">
+              <div class="card-body text-center">
+                <h6 class="card-title text-muted">التعليقات</h6>
+                <h2 class="card-text text-success">128</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card stats-card h-100 border-0">
+              <div class="card-body text-center">
+                <h6 class="card-title text-muted">المشاهدات</h6>
+                <h2 class="card-text text-success">5.2K</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card stats-card h-100 border-0">
+              <div class="card-body text-center">
+                <h6 class="card-title text-muted">الأرباح</h6>
+                <h2 class="card-text text-success">$320</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Latest Posts -->
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">أحدث المنشورات</h5>
+            <a href="#new-post" class="btn btn-success btn-sm">منشور جديد</a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>العنوان</th>
+                    <th>التصنيف</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="post-list-item">
+                    <td>كيف تحول منزلك بالكامل للاعتماد على الطاقة الشمسية</td>
+                    <td><span class="badge bg-success">الطاقة المتجددة</span></td>
+                    <td>15 أبريل 2025</td>
+                    <td><span class="badge bg-primary">منشور</span></td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <a href="#edit" class="btn btn-outline-secondary">تعديل</a>
+                        <a href="#view" class="btn btn-outline-primary">عرض</a>
+                        <a href="#delete" class="btn btn-outline-danger">حذف</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="post-list-item">
+                    <td>أفضل 5 ألواح شمسية لعام 2025</td>
+                    <td><span class="badge bg-info">تكنولوجيا</span></td>
+                    <td>12 أبريل 2025</td>
+                    <td><span class="badge bg-primary">منشور</span></td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <a href="#edit" class="btn btn-outline-secondary">تعديل</a>
+                        <a href="#view" class="btn btn-outline-primary">عرض</a>
+                        <a href="#delete" class="btn btn-outline-danger">حذف</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="post-list-item">
+                    <td>كيفية حساب احتياجاتك من الطاقة الشمسية</td>
+                    <td><span class="badge bg-warning text-dark">نصائح</span></td>
+                    <td>8 أبريل 2025</td>
+                    <td><span class="badge bg-primary">منشور</span></td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <a href="#edit" class="btn btn-outline-secondary">تعديل</a>
+                        <a href="#view" class="btn btn-outline-primary">عرض</a>
+                        <a href="#delete" class="btn btn-outline-danger">حذف</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="post-list-item">
+                    <td>دليل الصيانة الدورية لنظام الطاقة الشمسية</td>
+                    <td><span class="badge bg-warning text-dark">نصائح</span></td>
+                    <td>1 أبريل 2025</td>
+                    <td><span class="badge bg-primary">منشور</span></td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <a href="#edit" class="btn btn-outline-secondary">تعديل</a>
+                        <a href="#view" class="btn btn-outline-primary">عرض</a>
+                        <a href="#delete" class="btn btn-outline-danger">حذف</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="post-list-item">
+                    <td>مستقبل تخزين الطاقة: التطورات في تكنولوجيا البطاريات</td>
+                    <td><span class="badge bg-info">تكنولوجيا</span></td>
+                    <td>28 مارس 2025</td>
+                    <td><span class="badge bg-secondary">مسودة</span></td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <a href="#edit" class="btn btn-outline-secondary">تعديل</a>
+                        <a href="#view" class="btn btn-outline-primary">عرض</a>
+                        <a href="#delete" class="btn btn-outline-danger">حذف</a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- New Post Form -->
+        <div class="card mb-4" id="new-post">
+          <div class="card-header">
+            <h5 class="mb-0">إنشاء منشور جديد</h5>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="mb-3">
+                <label for="postTitle" class="form-label">عنوان المنشور</label>
+                <input type="text" class="form-control" id="postTitle" placeholder="أدخل عنوان المنشور">
+              </div>
+              <div class="mb-3">
+                <label for="postSubtitle" class="form-label">العنوان الفرعي</label>
+                <input type="text" class="form-control" id="postSubtitle" placeholder="أدخل العنوان الفرعي">
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="postCategory" class="form-label">التصنيف</label>
+                  <select class="form-select" id="postCategory">
+                    <option selected>اختر التصنيف</option>
+                    <option value="renewable">الطاقة المتجددة</option>
+                    <option value="tech">تكنولوجيا</option>
+                    <option value="tips">نصائح وإرشادات</option>
+                    <option value="case-studies">دراسات حالة</option>
+                    <option value="news">أخبار</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="postStatus" class="form-label">الحالة</label>
+                  <select class="form-select" id="postStatus">
+                    <option value="draft">مسودة</option>
+                    <option value="published">منشور</option>
+                    <option value="scheduled">مجدول</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="postImage" class="form-label">صورة المنشور</label>
+                <input type="file" class="form-control" id="postImage">
+              </div>
+              <div class="mb-3">
+                <label for="postContent" class="form-label">محتوى المنشور</label>
+                <div class="content-editor" id="postContent" contenteditable="true">
+                  أدخل محتوى المنشور هنا...
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="postTags" class="form-label">الوسوم</label>
+                <div class="tag-input" id="postTags">
+                  <span class="tag">الطاقة الشمسية <span class="close">&times;</span></span>
+                  <span class="tag">الاستدامة <span class="close">&times;</span></span>
+                  <input type="text" placeholder="أضف وسماً...">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="postSeo" class="form-label">وصف SEO</label>
+                <textarea class="form-control" id="postSeo" rows="2" placeholder="أدخل وصفاً مختصراً للمنشور (يظهر في نتائج البحث)"></textarea>
+              </div>
+              <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary">حفظ كمسودة</button>
+                <button type="submit" class="btn btn-success">نشر المنشور</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add new tags
+      const tagInput = document.querySelector('#postTags input');
+      tagInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+          e.preventDefault();
+          const tagText = this.value.trim();
+          if (tagText) {
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.innerHTML = tagText + ' <span class="close">&times;</span>';
+            this.parentNode.insertBefore(tag, this);
+            this.value = '';
+            tag.querySelector('.close').addEventListener('click', function() {
+              this.parentNode.remove();
+            });
+          }
+        }
+      });
+      // Remove existing tags
+      document.querySelectorAll('.tag .close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+          this.parentNode.remove();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}إدارة AdSense - حاسبة الطاقة الشمسية{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">إدارة AdSense</h1>
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="admin-sidebar mb-4">
+                <h5>لوحة التحكم</h5>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{{ url_for('admin_index') }}">الرئيسية</a>
+                    <a class="nav-link" href="{{ url_for('admin_posts') }}">المنشورات</a>
+                    <a class="nav-link" href="{{ url_for('admin_comments') }}">التعليقات</a>
+                    <a class="nav-link active" href="{{ url_for('adsense.admin_adsense') }}">AdSense</a>
+                    <a class="nav-link" href="#">Analytics</a>
+                    <a class="nav-link" href="#">Search Console</a>
+                </nav>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>معلومات الحساب</h5>
+                </div>
+                <div class="card-body">
+                    {% if account %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>اسم الحساب:</strong> {{ account.displayName }}</p>
+                                <p><strong>معرف الحساب:</strong> {{ account.name.split('/')[-1] }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>تاريخ الإنشاء:</strong> {{ account.createTime }}</p>
+                                <p><strong>الحالة:</strong> {{ account.state }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            لم يتم العثور على معلومات الحساب. يرجى التحقق من إعدادات API.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>ملخص الأرباح</h5>
+                </div>
+                <div class="card-body">
+                    {% if earnings and earnings.rows %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">الأرباح المقدرة</h5>
+                                        <p class="card-text display-6">{{ earnings.rows[0].cells[0].value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">المشاهدات</h5>
+                                        <p class="card-text display-6">{{ earnings.rows[0].cells[1].value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">النقرات</h5>
+                                        <p class="card-text display-6">{{ earnings.rows[0].cells[3].value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ url_for('adsense.admin_earnings') }}" class="btn btn-primary">عرض تقرير مفصل</a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            لا توجد بيانات أرباح متاحة للفترة المحددة.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>عملاء الإعلانات</h5>
+                </div>
+                <div class="card-body">
+                    {% if ad_clients %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>المعرف</th>
+                                        <th>النوع</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for client in ad_clients %}
+                                        <tr>
+                                            <td>{{ client.name.split('/')[-1] }}</td>
+                                            <td>{{ client.productCode }}</td>
+                                            <td>
+                                                <a href="{{ url_for('adsense.admin_ad_units', ad_client_id=client.name.split('/')[-1]) }}" class="btn btn-sm btn-primary">عرض وحدات الإعلانات</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            لا توجد عملاء إعلانات متاحين.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>إنشاء كود إعلان</h5>
+                </div>
+                <div class="card-body">
+                    <form id="adCodeForm">
+                        <div class="mb-3">
+                            <label for="adType" class="form-label">نوع الإعلان</label>
+                            <select class="form-select" id="adType" name="ad_type">
+                                <option value="responsive">إعلان متجاوب</option>
+                                <option value="in_article">إعلان داخل المقال</option>
+                                <option value="auto">إعلانات تلقائية</option>
+                                <option value="custom">إعلان مخصص</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="adClientId" class="form-label">معرف عميل الإعلانات</label>
+                            <select class="form-select" id="adClientId" name="ad_client_id">
+                                {% for client in ad_clients %}
+                                    <option value="{{ client.name.split('/')[-1] }}">{{ client.name.split('/')[-1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3" id="adUnitIdContainer" style="display: none;">
+                            <label for="adUnitId" class="form-label">معرف وحدة الإعلانات</label>
+                            <input type="text" class="form-control" id="adUnitId" name="ad_unit_id">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">إنشاء الكود</button>
+                    </form>
+                    
+                    <div class="mt-4" id="adCodeResult" style="display: none;">
+                        <h6>كود الإعلان:</h6>
+                        <div class="form-group">
+                            <textarea class="form-control" id="adCodeOutput" rows="8" readonly></textarea>
+                        </div>
+                        <button class="btn btn-secondary mt-2" id="copyAdCode">نسخ الكود</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // إظهار/إخفاء حقل معرف وحدة الإعلانات
+        const adTypeSelect = document.getElementById('adType');
+        const adUnitIdContainer = document.getElementById('adUnitIdContainer');
+        
+        adTypeSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                adUnitIdContainer.style.display = 'block';
+            } else {
+                adUnitIdContainer.style.display = 'none';
+            }
+        });
+        
+        // معالجة نموذج إنشاء كود الإعلان
+        const adCodeForm = document.getElementById('adCodeForm');
+        const adCodeResult = document.getElementById('adCodeResult');
+        const adCodeOutput = document.getElementById('adCodeOutput');
+        
+        adCodeForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(adCodeForm);
+            
+            fetch('/api/adsense/generate_ad_code', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('حدث خطأ: ' + data.error);
+                } else {
+                    adCodeOutput.value = data.ad_code;
+                    adCodeResult.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء إنشاء كود الإعلان');
+            });
+        });
+        
+        // نسخ كود الإعلان
+        const copyAdCodeBtn = document.getElementById('copyAdCode');
+        
+        copyAdCodeBtn.addEventListener('click', function() {
+            adCodeOutput.select();
+            document.execCommand('copy');
+            alert('تم نسخ الكود إلى الحافظة');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة الطاقة الشمسية | الصفحة الرئيسية</title>
+    
+    <!-- روابط Bootstrap RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- خط Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- ملف CSS المخصص -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Chart.js للرسوم البيانية -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-sun-fill me-2"></i>حاسبة الطاقة الشمسية
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">الرئيسية</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="calculator.html">الحاسبة</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">لوحة التحكم</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">المدونة</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">اتصل بنا</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <select id="language-selector" class="form-select form-select-sm me-2">
+                        <option value="ar" selected>العربية</option>
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="es">Español</option>
+                    </select>
+                    <select id="currency-selector" class="form-select form-select-sm">
+                        <!-- سيتم ملؤه بواسطة JavaScript -->
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- قسم العنوان الرئيسي -->
+    <section class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">احسب توفيرك مع الطاقة الشمسية</h1>
+                    <p class="lead mb-4">استخدم حاسبة الطاقة الشمسية المتقدمة لمعرفة كم يمكنك توفيره من فواتير الكهرباء، والمساهمة في حماية البيئة، وتحقيق الاستقلال الطاقي.</p>
+                    <a href="#calculator-section" class="btn btn-success btn-lg px-4 me-2">
+                        <i class="bi bi-calculator me-2"></i>احسب توفيرك الآن
+                    </a>
+                    <a href="blog.html" class="btn btn-outline-success btn-lg px-4">
+                        <i class="bi bi-book me-2"></i>تعلم المزيد
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="images/solar-panels-hero.jpg" alt="ألواح شمسية" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ويدجت الطقس والإشعاع الشمسي -->
+    <section class="weather-widget py-3 border-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill text-success me-2 fs-4"></i>
+                        <div>
+                            <small class="text-muted">الموقع الحالي</small>
+                            <div id="location-display">جاري تحديد الموقع...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cloud-sun-fill text-success me-2 fs-4"></i>
+                        <div>
+                            <small class="text-muted">الطقس الحالي</small>
+                            <div id="weather-display">جاري تحميل بيانات الطقس...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-sun text-success me-2 fs-4"></i>
+                        <div>
+                            <small class="text-muted">الإشعاع الشمسي</small>
+                            <div id="solar-radiation-display">جاري تحميل البيانات...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الحاسبة -->
+    <section id="calculator-section" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">حاسبة الطاقة الشمسية</h2>
+                    <p class="lead mb-5">أدخل بيانات موقعك ونظام الطاقة الشمسية المرغوب لحساب التوفير المحتمل والفوائد البيئية.</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">أدخل البيانات</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="solar-calculator-form">
+                                <!-- الموقع -->
+                                <div class="mb-4">
+                                    <label for="location-input" class="form-label">الموقع</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="location-input" placeholder="أدخل عنوانك أو حدد على الخريطة">
+                                        <button class="btn btn-outline-success" type="button" id="detect-location">
+                                            <i class="bi bi-geo-alt"></i>
+                                        </button>
+                                    </div>
+                                    <div id="map" class="mt-3" style="height: 300px;"></div>
+                                </div>
+                                
+                                <!-- تفاصيل النظام -->
+                                <h5 class="mb-3">تفاصيل النظام</h5>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="system-capacity" class="form-label">قدرة النظام (كيلوواط)</label>
+                                        <input type="number" class="form-control" id="system-capacity" min="1" max="100" step="0.5" value="5">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="roof-size" class="form-label">مساحة السطح المتاحة (م²)</label>
+                                        <input type="number" class="form-control" id="roof-size" min="10" max="1000" step="5" value="35">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="panel-tilt" class="form-label">زاوية ميل الألواح (درجة)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="panel-tilt" min="0" max="90" step="1" value="20">
+                                            <span class="input-group-text">درجة</span>
+                                        </div>
+                                        <small class="text-muted">الزاوية المثالية: <span id="optimal-tilt">20</span> درجة</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="panel-azimuth" class="form-label">اتجاه الألواح (درجة)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="panel-azimuth" min="0" max="360" step="1" value="180">
+                                            <span class="input-group-text">درجة</span>
+                                        </div>
+                                        <small class="text-muted">الاتجاه المثالي: <span id="optimal-azimuth">180</span> درجة (جنوب)</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3 text-center">
+                                    <button type="button" id="optimal-values-button" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-magic"></i> استخدام القيم المثالية
+                                    </button>
+                                </div>
+                                
+                                <!-- استهلاك الكهرباء -->
+                                <h5 class="mb-3">استهلاك الكهرباء</h5>
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label for="electricity-consumption" class="form-label">متوسط الاستهلاك الشهري (كيلوواط ساعة)</label>
+                                        <input type="number" class="form-control" id="electricity-consumption" min="100" max="10000" step="50" value="500">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="electricity-price" class="form-label">سعر الكهرباء (لكل كيلوواط ساعة)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="electricity-price" min="0.01" max="1" step="0.01" value="0.15">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- زر الحساب -->
+                                <div class="text-center">
+                                    <button type="button" id="calculate-button" class="btn btn-success btn-lg px-5">
+                                        <i class="bi bi-calculator me-2"></i>احسب النتائج
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- قسم المقالات ذات الصلة -->
+                    <div id="related-articles" class="mb-4">
+                        <!-- سيتم ملؤه بواسطة JavaScript -->
+                    </div>
+                    
+                    <!-- النشرة البريدية -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">النشرة البريدية</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>اشترك في نشرتنا البريدية للحصول على آخر التحديثات والنصائح حول الطاقة الشمسية.</p>
+                            <form id="newsletter-form">
+                                <div class="mb-3">
+                                    <label for="newsletter-email" class="form-label">البريد الإلكتروني</label>
+                                    <input type="email" class="form-control" id="newsletter-email" placeholder="أدخل بريدك الإلكتروني" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="bi bi-envelope me-2"></i>اشترك الآن
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم النتائج -->
+    <section id="results-section" class="py-5 bg-light" style="display: none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">نتائج حساب الطاقة الشمسية</h2>
+                    <p class="lead mb-5">بناءً على المعلومات التي أدخلتها، إليك النتائج المتوقعة لنظام الطاقة الشمسية الخاص بك.</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- إنتاج الطاقة -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">إنتاج الطاقة</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="result-item">
+                                <h4>الإنتاج السنوي</h4>
+                                <p class="display-6 text-success" id="annual-production">0 كيلوواط ساعة/سنة</p>
+                            </div>
+                            
+                            <div class="result-item">
+                                <h4>نسبة تغطية الاستهلاك</h4>
+                                <p class="mb-2" id="coverage-percentage">0%</p>
+                                <div class="progress">
+                                    <div id="coverage-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">الإنتاج الشهري</h4>
+                            <div style="height: 300px;">
+                                <canvas id="monthly-production-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- التوفير المالي -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">التوفير المالي</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="result-item text-center">
+                                        <h4>شهرياً</h4>
+                                        <p class="display-6 text-success" id="monthly-savings">$0</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="result-item text-center">
+                                        <h4>سنوياً</h4>
+                                        <p class="display-6 text-success" id="annual-savings">$0</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="result-item text-center">
+                                        <h4>مدى الحياة</h4>
+                                        <p class="display-6 text-success" id="lifetime-savings">$0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">التوفير على مدار الزمن</h4>
+                            <div style="height: 300px;">
+                                <canvas id="financial-savings-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- الفوائد البيئية -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">الفوائد البيئية</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="result-item text-center">
+                                        <h4>تخفيض CO2</h4>
+                                        <p class="display-6 text-success" id="co2-reduction">0 كجم/سنة</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="result-item text-center">
+                                        <h4>ما يعادل من الأشجار</h4>
+                                        <p class="display-6 text-success" id="trees-equivalent">0 شجرة</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4 class="mb-3">ماذا يعني هذا؟</h4>
+                                <p>تخفيض انبعاثات CO2 يساهم في مكافحة تغير المناخ. كل كيلوواط ساعة من الكهرباء النظيفة يمنع انبعاث حوالي 0.5 كجم من CO2 في الغلاف الجوي.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- تفاصيل الاستثمار -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h3 class="card-title mb-0">تفاصيل الاستثمار</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="result-item text-center">
+                                        <h4>التكلفة التقديرية</h4>
+                                        <p class="display-6 text-success" id="estimated-cost">$0</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="result-item text-center">
+                                        <h4>فترة الاسترداد</h4>
+                                        <p class="display-6 text-success" id="payback-period">0 سنة</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="result-item text-center">
+                                        <h4>العائد على الاستثمار</h4>
+                                        <p class="display-6 text-success" id="roi">0%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4 class="mb-3">ملاحظات</h4>
+                                <p>هذه تقديرات أولية. للحصول على تقدير دقيق، يرجى التواصل مع مزود خدمة معتمد. قد تتوفر حوافز وإعفاءات ضريبية تقلل من التكلفة الإجمالية.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- مؤشر التحميل -->
+            <div id="loading-indicator" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">جاري التحميل...</span>
+                </div>
+                <p class="mt-3">جاري حساب النتائج...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم لماذا الطاقة الشمسية -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">لماذا الطاقة الشمسية؟</h2>
+                    <p class="lead mb-5">الطاقة الشمسية هي استثمار ذكي للمستقبل، توفر العديد من الفوائد لك وللبيئة.</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="bi bi-piggy-bank text-success fs-1"></i>
+                            </div>
+                            <h3 class="card-title text-center">توفير مالي</h3>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>تخفيض فواتير الكهرباء</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>حماية من ارتفاع أسعار الكهرباء</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>زيادة قيمة العقار</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>عائد استثماري جيد</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="bi bi-tree text-success fs-1"></i>
+                            </div>
+                            <h3 class="card-title text-center">فوائد بيئية</h3>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>تقليل انبعاثات الكربون</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>طاقة نظيفة ومتجددة</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>تقليل الاعتماد على الوقود الأحفوري</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>المساهمة في مستقبل مستدام</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <i class="bi bi-lightning-charge text-success fs-1"></i>
+                            </div>
+                            <h3 class="card-title text-center">استقلال طاقي</h3>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>تقليل الاعتماد على شبكة الكهرباء</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>حماية من انقطاع التيار الكهربائي</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>إنتاج الطاقة في موقع الاستهلاك</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>تكنولوجيا موثوقة وطويلة الأمد</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الخطوات التالية -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">الخطوات التالية</h2>
+                    <p class="lead mb-5">بعد حساب التوفير المحتمل، إليك الخطوات التالية للبدء في رحلتك نحو الطاقة الشمسية.</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success mb-3 step-number">1</div>
+                            <h3 class="card-title">التقييم</h3>
+                            <p class="card-text">احصل على تقييم مفصل لموقعك واحتياجاتك من مزود خدمة معتمد.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success mb-3 step-number">2</div>
+                            <h3 class="card-title">التصميم</h3>
+                            <p class="card-text">الحصول على تصميم مخصص لنظام الطاقة الشمسية يناسب احتياجاتك وميزانيتك.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success mb-3 step-number">3</div>
+                            <h3 class="card-title">التركيب</h3>
+                            <p class="card-text">تركيب النظام بواسطة فنيين معتمدين والحصول على جميع التصاريح اللازمة.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-success mb-3 step-number">4</div>
+                            <h3 class="card-title">الاستمتاع</h3>
+                            <p class="card-text">استمتع بفواتير كهرباء أقل وبيئة أنظف لسنوات قادمة.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="contact.html" class="btn btn-success btn-lg px-5">
+                    <i class="bi bi-chat-dots me-2"></i>تواصل مع خبير
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5>حاسبة الطاقة الشمسية</h5>
+                    <p>أداة متقدمة لحساب التوفير المحتمل والفوائد البيئية للطاقة الشمسية.</p>
+                    <div class="d-flex mt-4">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-linkedin fs-5"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5>روابط سريعة</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-white">الرئيسية</a></li>
+                        <li class="mb-2"><a href="calculator.html" class="text-white">الحاسبة</a></li>
+                        <li class="mb-2"><a href="dashboard.html" class="text-white">لوحة التحكم</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-white">المدونة</a></li>
+                        <li><a href="contact.html" class="text-white">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5>المدونة</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white">أحدث المقالات</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">نصائح لتوفير الطاقة</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">تكنولوجيا الطاقة الشمسية</a></li>
+                        <li class="mb-2"><a href="#" class="text-white">قصص نجاح</a></li>
+                        <li><a href="#" class="text-white">أخبار الطاقة المتجددة</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h5>اتصل بنا</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>الرياض، المملكة العربية السعودية</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i>+966 12 345 6789</li>
+                        <li class="mb-2"><i class="bi bi-envelope me-2"></i>info@solar-calculator.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2025 حاسبة الطاقة الشمسية. جميع الحقوق محفوظة.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-white me-3">سياسة الخصوصية</a>
+                    <a href="#" class="text-white">شروط الاستخدام</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- مكتبات JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
+    
+    <!-- ملفات JavaScript المخصصة -->
+    <script src="js/maps-api.js"></script>
+    <script src="js/weather-api.js"></script>
+    <script src="js/pvwatts-api.js"></script>
+    <script src="js/eia-api.js"></script>
+    <script src="js/blog-integration.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

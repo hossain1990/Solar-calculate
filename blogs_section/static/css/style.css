@@ -1,0 +1,125 @@
+/* 
+ * الأنماط المخصصة لقسم المدونات
+ */
+
+/* الألوان الأساسية */
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #2196F3;
+  --accent-color: #FFC107;
+  --text-color: #333;
+  --light-bg: #f8f9fa;
+}
+
+/* تنسيقات عامة */
+body {
+  font-family: 'Tajawal', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* تنسيقات المدونة */
+.blog-post {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.blog-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border-radius: 5px;
+}
+
+.blog-content h2, .blog-content h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content blockquote {
+  border-right: 4px solid var(--primary-color);
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0;
+  background-color: var(--light-bg);
+  font-style: italic;
+}
+
+/* تنسيقات البطاقات */
+.card {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+/* تنسيقات الأزرار */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #3d8b40;
+  border-color: #3d8b40;
+}
+
+/* تنسيقات الشارات */
+.badge {
+  padding: 0.4rem 0.6rem;
+  margin-left: 0.3rem;
+}
+
+/* تنسيقات لوحة الإدارة */
+.admin-sidebar {
+  background-color: var(--light-bg);
+  padding: 1.5rem;
+  border-radius: 5px;
+}
+
+.admin-sidebar .nav-link {
+  color: var(--text-color);
+  padding: 0.5rem 0;
+}
+
+.admin-sidebar .nav-link.active {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* تنسيقات محرر المحتوى */
+.content-editor {
+  min-height: 300px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+/* تنسيقات مساحات الإعلانات */
+.adsense-placeholder {
+  background-color: var(--light-bg);
+  border: 1px dashed #dee2e6;
+  border-radius: 5px;
+  padding: 1rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* تنسيقات متجاوبة */
+@media (max-width: 768px) {
+  .blog-content {
+    font-size: 1rem;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+}
